@@ -71,7 +71,7 @@ class Store{
 
     static removeBook(isbn){
         const books=Store.getBook();
-        books.forEach(book,index => {
+        books.forEach(function(book,index) {
             if(book.isbn === isbn)
             books.splice(index,1);
         });
