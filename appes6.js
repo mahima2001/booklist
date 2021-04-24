@@ -56,22 +56,32 @@ class Store{
     }
 
     static displayBooks(){
-
-    }
-
-    static addBooks(){
         const books=Store.getBook();
-        book.push(book);
-        localStorage.setItem(JSON.stringify(book));
+        books.forEach(book => {
+            const ui=new UI();
+            ui.addBookToList(book);
+        });
     }
 
-    static removeBook(){
+    static addBooks(book){
+        const books=Store.getBook();
+        books.push(book);
+        localStorage.setItem('books',JSON.stringify(books));
+    }
 
+    static removeBook(isbn){
+        const books=Store.getBook();
+        books.forEach(book,index => {
+            if(book.isbn === isbn)
+            books.splice(index,1);
+        });
+        localStorage.setItem('books',JSON.stringify(books));
     }
 
     
 }
 
+document.addEventListener('DOMContentLoaded',Store.displayBooks);
 
 document.getElementById('book-form').addEventListener('submit',function(e){
     // Get form values
@@ -91,7 +101,7 @@ document.getElementById('book-form').addEventListener('submit',function(e){
         ui.showAlert('Book Added!','success');
         ui.addBookToList(book);
 
-        Store.addBooks();
+        Store.addBooks(book);
 
         ui.clearFields();
     }
@@ -102,6 +112,9 @@ document.getElementById('book-list').addEventListener('click',function(e){
     const ui = new UI();
     
     ui.deleteBook(e.target);
+    Store.removeBook(e.target.parentElement.previousElementSibling.textContent);//parent element gives a tag and its previous sibling is the isbn column so we are sending the isbn value
+
     ui.showAlert('Book Removed','success');
+
     e.preventDefault();
 })
